@@ -1,0 +1,95 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+.login-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 20px;
+}
+.btn-contraste{
+  background-color: transparent;
+  border: 1ox solid var(--primary-color);
+  color: var(--primary-color);
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+.btn-contraste:hover{
+  background: var(--primary-color);
+  color: rgb(22, 22, 1);
+}
+body.high-contraste .btn-contraste{
+  border-color:#ffff00;
+  color: #ffff00;
+}
+
+form {
+  background-color: var(--form-bg);
+  padding: 40px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  width: 100vh;
+  max-width: 400px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+  border: 1px solid var(--input-border);
+}
+
+h2 {
+  color: var(--text-color);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+label {
+  color: var(--label-color);
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input {
+  background: var(--input-bg);
+  color: var(--text-color);
+  border: 1px solid var(--input-border);
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  outline: none;
+}
+
+input:focus {
+  border: 2px solid var(--primary-color);
+}
+
+button {
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 15px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover{
+    background-color:#f82732;;
+}
+
+body.high-contrast button {
+  color: #000;
+}
+
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

@@ -1,0 +1,132 @@
+.header-user { margin-bottom: 30px; }
+.header-user h1 { color: #333; font-size: 28px; }
+
+/* Estilização do Cabeçalho da Área do Usuário */
+.header-user {
+    margin-bottom: 40px; 
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee; 
+}
+
+.header-user h1 {
+    font-size: 2.2rem;
+    font-family: monospace;
+    color: #1a1a1a;
+    margin: 0 0 8px 0;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.header-user p {
+    font-size: 1.1rem;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #666;
+    margin: 0;
+    font-weight: 400;
+}
+.badge-novo {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #e50914; /* Vermelho estilo Netflix */
+    color: white;
+    padding: 5px 10px;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 4px;
+    z-index: 2;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.grid-filmes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 25px;
+}
+
+.card-filme {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.card-filme:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.capa-container { position: relative; height: 300px; }
+.capa-container img { width: 100%; height: 100%; object-fit: cover; }
+
+.btn-favorito {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-info { padding: 15px; }
+.card-info h3 { margin: 0 0 10px; font-size: 18px; color: #222; }
+
+.genero-tag {
+  background: #f0f0f0;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #666;
+}
+
+.btn-detalhes {
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+  border: 2px solid #1976d2;
+  background: transparent;
+  color: #1976d2;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-detalhes:hover {
+   background: #1976d2; color: white; 
+  }
+
+/* ALTO CONTRASTE UNIFICADO */
+:host-context(body.high-contrast) .card-filme,
+:host-context(body.high-contrast) .btn-detalhes {
+  background-color: #000 !important;
+  border: 2px solid #ffff00 !important;
+  color: #ffff00 !important;
+}
+
+:host-context(body.high-contrast) .btn-favorito {
+  background-color: #ffff00 !important;
+}
+/* Suporte ao Alto Contraste */
+:host-context(body.high-contrast) .header-user {
+    border-bottom: 2px solid #ffff00 !important;
+}
+
+:host-context(body.high-contrast) .header-user h1,
+:host-context(body.high-contrast) .header-user p {
+    color: #ffff00 !important;
+}
+/* Alto Contraste para a Badge */
+:host-context(body.high-contrast) .badge-novo {
+    background-color: #ffff00 !important;
+    color: #000 !important;
+    border: 1px solid #000;
+}

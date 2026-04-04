@@ -1,0 +1,37 @@
+<app-menu-lateral></app-menu-lateral>
+
+<div class="container-detalhes" *ngIf="filme; else templateNaoEncontrado">
+    
+    <div class="header-acoes">
+        <button routerLink="/admin" class="btn-voltar">⬅ Voltar</button>
+    </div>
+
+    <div class="detalhes-card">
+        <div class="capa-container">
+            <img [src]="filme.capa" [alt]="filme.titulo">
+        </div>
+
+        <div class="info">
+            <h1>{{ filme.titulo }}</h1>
+            <div class="tags">
+                <span class="genero-tag">{{ filme.genero }}</span>
+                <span class="ano-tag"> 📅 {{ filme.ano }}</span>
+            </div>
+            
+            <div class="sinopse">
+                <h3>Sinopse</h3>
+                <p class="descricao">{{ filme.descricao }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #templateNaoEncontrado>
+    <div class="erro-container">
+        <div class="erro-card">
+            <h2>⚠️ Ops! Filme não encontrado.</h2>
+            <p>O filme que você está procurando não existe ou foi removido.</p>
+            <button routerLink="/admin" class="btn-voltar-erro">Voltar para a Home</button>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,48 @@
+<app-menu-lateral></app-menu-lateral>
+
+<div class="container-centralizado">
+    <div class="main-content">
+        <a routerLink="/admin/usuarios" class="btn-voltar">
+            <span>⬅</span> Voltar para a Lista
+        </a>
+</div>
+
+    <div class="card-form">
+        <h2>{{ isEdicao ? 'Editar Usuário' : 'Novo Usuário' }}</h2>
+        <hr>
+
+        <form (ngSubmit)="salvar()">
+            <div class="form-group">
+                <label>Nome Completo</label>
+                <input type="text" [(ngModel)]="usuario.nome" name="nome" required placeholder="Ex: João Silva">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="email" [(ngModel)]="usuario.email" name="email" required placeholder="joao@email.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Telefone</label>
+                    <input type="text" [(ngModel)]="usuario.telefone" name="telefone" placeholder="(00) 00000-0000">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Perfil de Acesso</label>
+                <select [(ngModel)]="usuario.perfil" name="perfil">
+                    <option value="USER">Usuário Comum (USER)</option>
+                    <option value="ADM">Administrador (ADM)</option>
+                </select>
+            </div>
+
+            <div class="form-acoes">
+                <button type="button" class="btn-cancelar" routerLink="/admin/usuarios">Cancelar</button>
+                <button type="submit" class="btn-salvar">
+                    {{ isEdicao ? 'Atualizar Dados' : 'Cadastrar Usuário' }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+<app-menu-lateral></app-menu-lateral>
+
+<div class="conteudo-da-pagina">
+  <h1>Bem-vindo, Administrador!</h1>
+</div>
+<div class="content-container">
+  <header class="admin-header">
+    <h1>Painel Administrativo</h1>
+  </header>
+  <div class="movie-grid">
+    <div class="movie-cardie adm-card" *ngFor="let filme of listaFilmes">
+      <img [src]="filme.capa" [alt]="filme.titulo">
+
+      <div class="card-info"> 
+        <h3>{{ filme.titulo }}</h3>
+        <p>{{ filme.genero }}</p>
+      </div>
+
+      <div class="adm-actions">
+        <button class="btn-view" [routerLink]="['/admin/filme', filme.id]" title="Visualizar">👁️</button>
+        <button class="btn-edit" [routerLink]="['/admin/filme/editar', filme.id]" title="Editar"> ✏️</button>
+        <button class="btn-delete" (click)="remover(filme.id)" title="Excluir">🗑️</button>
+      </div>
+    </div>
+  </div>
+</div>

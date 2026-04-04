@@ -1,0 +1,74 @@
+<app-menu-lateral></app-menu-lateral>
+
+<div class="main-content">
+    <a routerLink="/admin" class="btn-voltar">
+        <span>⬅</span> Voltar ao Painel
+    </a>
+
+    <div class="header-pagina">
+        <h1>Gerenciar Usuários</h1>
+
+        <div class="busca-container">
+            <input type="text" [(ngModel)]="termoBusca" placeholder="🔍 Pesquisar usuário por nome...">
+        </div>
+    </div>
+
+    <div class="tabela-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>Perfil</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let user of usuariosFiltrados">
+                    <tr>
+                        <td>{{ user.nome }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            <span class="badge" [ngClass]="user.perfil === 'ADM' ? 'adm' : 'user'">
+                                {{ user.perfil }}
+                            </span>
+                        </td>
+                        <td class="acoes">
+                            <button class="btn-acao btn-ver" (click)="alternarExpansao(user.id)" title="Ver Detalhes">
+                                {{ usuarioExpandidoId === user.id ? '✖️' : '👁️' }}
+                            </button>
+                            
+                            <button class="btn-acao btn-editar" [routerLink]="['/admin/usuarios/form', user.id]" title="Editar">✏️</button>
+                            <button class="btn-acao btn-excluir" (click)="excluir(user.id)" title="Excluir">🗑️</button>
+                        </td>
+                    </tr>
+
+                    <tr *ngIf="usuarioExpandidoId === user.id" class="linha-detalhes">
+                        <td colspan="4">
+                            <div class="detalhes-usuario-card">
+                                <div class="info-grid">
+                                    <div class="info-item">
+                                        <strong>ID:</strong> <span>#{{ user.id }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <strong>Telefone:</strong> <span>{{ user.telefone || '(00) 00000-0000' }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <strong>Cadastrado em:</strong> <span>{{ user.dataCadastro | date:'dd/MM/yyyy' }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <strong>Status:</strong> <span class="status-ativo">Ativo</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+
+        <div *ngIf="usuariosFiltrados.length === 0" class="sem-resultados">
+            Nenhum usuário encontrado com o nome "{{ termoBusca }}".
+        </div>
+    </div>
+</div>

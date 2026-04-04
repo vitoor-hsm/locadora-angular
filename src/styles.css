@@ -1,1 +1,71 @@
-/* You can add global styles to this file, and also import other style files */
+/* --- TEMA PADRÃO (CLARO) --- */
+
+:root {
+  --bg-color: #dbcfcf;        /* Fundo cinza bem claro */
+  --form-bg: #ffffff;        /* Card branco */
+  --text-color: #333333;     /* Texto quase preto */
+  --input-bg: #ffffff;       /* Input branco */
+  --input-border: #cccccc;   /* Borda cinza */
+  --primary-color: #e50914;  /* Vermelho  */
+  --label-color: #666666;    /* Labels cinza escuro */
+}
+
+/* --- TEMA ALTO CONTRASTE --- */
+body.high-contrast {
+  --bg-color: #000000;       /* Fundo preto puro */
+  --form-bg: #000000;        /* Card preto */
+  --text-color: #ffff00;     /* Texto AMARELO  */
+  --input-bg: #000000;       /* Input preto */
+  --input-border: #ffff00;   /* Borda amarela */
+  --primary-color: #a6ff01;  
+  --label-color: #ffff00;
+
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: Arial, sans-serif;
+  transition: all 0.3s ease;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+h1, h2 {
+  margin-top: 0;
+  padding-top: 20px; 
+}
+body.high-contrast .conteudo-da-pagina h1 {
+    color: #ffff00 !important; 
+    background: transparent !important;
+}
+body.high-contrast .admin-header {
+    border-bottom: 2px solid #ffff00 !important; 
+    background: #000 !important;
+}
+
+body.high-contrast .admin-header h1 {
+    color: #ffffff !important;
+}
+
+body.high-contrast .admin-header h1::after {
+    background: #ffff00 !important;
+}
+
+body.high-contrast .conteudo-da-pagina,
+body.high-contrast .content-container {
+    background-color: #000 !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast hr {
+    border-color: #ffff00 !important;
+}
+

@@ -1,0 +1,142 @@
+.conteudo-da-pagina {
+  padding: 100px 20px 40px 20px; 
+  text-align: center; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.conteudo-da-pagina h1 {
+  font-size: 1.5rem;
+  font-weight: 600; 
+  color: #333; 
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin: 0;
+  position: relative;
+  display: inline-block;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 40px 40px 40px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid var(--input-border);
+}
+
+.admin-header h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text-color);
+  position: relative;
+  margin: 0;
+}
+
+.admin-header h1::after {
+  content: '';
+  position: absolute;
+  bottom: -17px;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: var(--primary-color);
+  border-radius: 2px;
+}
+.content-container {
+  padding: 0 40px;
+}
+.btn-novo {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.adm-actions {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  background: rgba(0,0,0,0.05);
+  border-top: 1px solid var(--input-border);
+}
+
+.adm-actions button {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.adm-actions button:hover {
+  transform: scale(1.2);
+}
+
+.btn-delete:hover { color: #ff4d4d; }
+.btn-edit:hover { color: #007bff; }
+
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+  gap: 25px; 
+  padding: 20px 0;
+  justify-items: center;
+}
+
+.movie-cardie {
+  background: var(--form-bg);
+  border-radius: 12px;
+  overflow: hidden; 
+  width: 100%;
+  max-width: 240px; 
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+  border: 1px solid var(--input-border);
+  display: flex;
+  flex-direction: column;
+}
+
+.movie-cardie:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.movie-cardie img {
+  width: 100%;
+  height: 320px; 
+  object-fit: cover; 
+  border-bottom: 1px solid var(--input-border);
+}
+
+.card-info {
+  padding: 12px;
+  flex-grow: 1; 
+}
+
+.card-info h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-info p {
+  font-size: 0.85rem;
+  color: var(--label-color);
+  margin-top: 5px;
+}
+
+.adm-actions {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.03);
+}
+

@@ -1,0 +1,17 @@
+<app-menu-lateral></app-menu-lateral>
+
+<div class="main-content">
+  <a routerLink="/user" class="btn-voltar">⬅ Voltar</a>
+
+  <div class="detalhe-container" *ngIf="filme">
+    <img [src]="filme.capa" class="capa-grande">
+    
+    <div class="info-detalhada">
+      <h1>{{ filme.titulo }}</h1>
+      <div class="meta">
+        <span>{{ filme.genero }}</span> • <span>{{ filme.ano }}</span>
+      </div>
+      <p class="descricao">{{ filme.descricao }}</p>
+    </div>
+  </div>
+</div>

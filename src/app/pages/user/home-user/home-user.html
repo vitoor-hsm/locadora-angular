@@ -1,0 +1,34 @@
+<app-menu-lateral></app-menu-lateral>
+
+<div class="main-content">
+  <header class="header-user">
+    <h1>🎬 Todas as opções para você</h1>
+    <p>Confira os últimos lançamentos da nossa locadora.</p>
+  </header>
+
+  <div class="grid-filmes">
+    <div class="card-filme" *ngFor="let filme of filmes">
+      <div class="capa-container">
+        <span class="badge-novo" *ngIf="filme.ano == 2026">NOVO</span>
+        <img [src]="filme.capa || 'assets/placeholder.png'" alt="Capa do filme">
+        <button class="btn-favorito" (click)="toggleFavorito(filme.id)" [class.ativo]="isFavorito(filme.id)">
+          {{ isFavorito(filme.id) ? '❤️' : '🤍' }}
+        </button>
+      </div>
+      
+      <div class="card-info">
+        <h3>{{ filme.titulo }}</h3>
+        <span class="genero-tag">{{ filme.genero }}</span>
+        <p class="ano">{{ filme.ano }}</p>
+        
+        <button class="btn-detalhes" [routerLink]="['/detalhes-filme', filme.id]">
+          Ver Detalhes
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="filmes.length === 0" class="sem-filmes">
+    Nenhum filme disponível no momento.
+  </div>
+</div>
