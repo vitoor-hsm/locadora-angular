@@ -4,7 +4,12 @@
     <a routerLink="/admin" class="btn-voltar">
         <span>⬅</span> Voltar ao Painel
     </a>
-
+    <div class="header-acoes">
+        <br>
+        <button class="btn-adicionar" [routerLink]="['/admin/usuarios/form/novo']">
+            ➕ Novo Usuário
+        </button>
+    </div>
     <div class="header-pagina">
         <h1>Gerenciar Usuários</h1>
 
@@ -37,8 +42,9 @@
                             <button class="btn-acao btn-ver" (click)="alternarExpansao(user.id)" title="Ver Detalhes">
                                 {{ usuarioExpandidoId === user.id ? '✖️' : '👁️' }}
                             </button>
-                            
-                            <button class="btn-acao btn-editar" [routerLink]="['/admin/usuarios/form', user.id]" title="Editar">✏️</button>
+
+                            <button class="btn-acao btn-editar" [routerLink]="['/admin/usuarios/form', user.id]"
+                                title="Editar">✏️</button>
                             <button class="btn-acao btn-excluir" (click)="excluir(user.id)" title="Excluir">🗑️</button>
                         </td>
                     </tr>
@@ -54,7 +60,8 @@
                                         <strong>Telefone:</strong> <span>{{ user.telefone || '(00) 00000-0000' }}</span>
                                     </div>
                                     <div class="info-item">
-                                        <strong>Cadastrado em:</strong> <span>{{ user.dataCadastro | date:'dd/MM/yyyy' }}</span>
+                                        <strong>Cadastrado em:</strong> <span>{{ user.dataCadastro | date:'dd/MM/yyyy'
+                                            }}</span>
                                     </div>
                                     <div class="info-item">
                                         <strong>Status:</strong> <span class="status-ativo">Ativo</span>

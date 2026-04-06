@@ -12,26 +12,26 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
   styleUrl: './home-user.css',
 })
 export class HomeUserComponent implements OnInit {
-  filmes: any[] = [];
-  favoritos: number[] = [];
+  filmes: any[] = [];// Array que guarda a lista de filmes que aparece na tela
+  favoritos: number[] = [];// Array de IDs dos filmes que o usuário curtiu
   
   constructor(private route: ActivatedRoute) {} 
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      this.carregarFilmes(params['ordem'] === 'novidades'); //toda vez que o parâmetro mudar, ele decide como carregar
-    });
-    this.carregarFavoritos();
+      this.carregarFilmes(params['ordem'] === 'novidades'); //toda vez que o user clica em novidades esse cod
+    });// chama o carregarfav com a instrução de ordenar
+    this.carregarFavoritos(); //roda apenas uma vez ao abrir a tela para buscar o que já foi curtido antes
   }
 
   carregarFilmes(ordenarPorNovidades: boolean = false) {
-    const dados = localStorage.getItem('meusFilmes');
-    let lista = dados ? JSON.parse(dados) : [];
+    const dados = localStorage.getItem('meusFilmes'); //Vai no "banco de dados" do navegador buscar a string de filmes
+    let lista = dados ? JSON.parse(dados) : [];//Transforma essa string de volta em um objeto/array que o JavaScript entende
 
     if (ordenarPorNovidades) {
       lista.sort((a: any, b: any) => b.ano - a.ano);
-    }
-    this.filmes = lista;
+    }//Se o parâmetro for verdadeiro, ele subtrai os anos. Se b.ano (2026) for maior que a.ano (2024), o resultado é positivo e o filme 
+    this.filmes = lista; //"sobe" na lista
   }
 
   carregarFavoritos() {
@@ -43,10 +43,10 @@ export class HomeUserComponent implements OnInit {
     this.filmes.sort((a: any, b: any) => b.ano - a.ano);
   }
   toggleFavorito(id: number) {
-    if (this.favoritos.includes(id)) {
-      this.favoritos = this.favoritos.filter(favId => favId !== id);
+    if (this.favoritos.includes(id)) {//ja ta na lista?
+      this.favoritos = this.favoritos.filter(favId => favId !== id);// se tiver remove
     } else {
-      this.favoritos.push(id);
+      this.favoritos.push(id);// se n tiver, adc
     }
     localStorage.setItem('favoritos', JSON.stringify(this.favoritos));
   }

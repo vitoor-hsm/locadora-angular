@@ -22,10 +22,10 @@ export const routes: Routes = [
   },
 
   {
-    path: 'admin/filme/:id',
-    component: FilmeDetalhesComponent,
+    path: 'admin/filme/:id', // o id é o paramentro, canActivate autoguard é uma trava de segurança, antes de 
+    component: FilmeDetalhesComponent, //carregar a tela, o angular chama o authGuard 
     canActivate: [authGuard],
-    data: { papelOriginal: 'ADM' }
+    data: { papelOriginal: 'ADM' } // aqui ele olha se a rota é do user ou do adm
   },
 
   {
@@ -63,6 +63,6 @@ export const routes: Routes = [
 
   { path: '', redirectTo: '/login', pathMatch: 'full' },
 
-  { path: '**', redirectTo: '/login' }
+  { path: '**', redirectTo: '/login' } // "pega tudo" qlqr rota que não exista volta pro login
 
 ];

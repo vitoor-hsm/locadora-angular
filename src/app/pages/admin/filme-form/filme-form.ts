@@ -48,7 +48,7 @@ export class FilmeFormComponent implements OnInit {
         this.router.navigate(['/admin']);
       }
     } else {
-      // caso o localStorage esteja vazio por algum motivo
+     
       this.router.navigate(['/admin']);
     }
   }

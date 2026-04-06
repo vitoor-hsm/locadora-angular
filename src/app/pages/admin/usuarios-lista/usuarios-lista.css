@@ -92,6 +92,22 @@ th {
     font-weight: bold;
     text-transform: uppercase;
 }
+.btn-adicionar {
+  background-color: #28a745; /* Verde */
+  color: white;
+  margin-left: 80%;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.btn-adicionar:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+}
 
 .btn-voltar {
     text-decoration: none;
@@ -140,6 +156,8 @@ th {
         opacity: 1;
     }
 }
+
+
 
 /*  MODO ALTO CONTRASTE (UNIFICADO) */
 :host-context(body.high-contrast) .main-content *,
