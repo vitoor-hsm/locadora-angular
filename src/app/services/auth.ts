@@ -15,20 +15,20 @@ export class AuthService {
   constructor(private router: Router) { //quando o site carrega, o serviço "acorda" e olha no local storage 
     const salvo = localStorage.getItem('usuarioLogado');// se encontrar alguém lá, ele já loga o usuário 
     if (salvo) { //automaticamente para ele não precisar digitar a senha toda vez que der F5.
-    this.usuarioLogado = JSON.parse(salvo);
-  }
+      this.usuarioLogado = JSON.parse(salvo);
+    }
 
   }
 
-  
+
   login(dados: any) {
     const user = this.users.find(u => u.login === dados.login && u.senha === dados.senha);
-                //percorre a listade usuario procurando alguém que tenha o login E senha iguais ao BD simulado
+    //percorre a listade usuario procurando alguém que tenha o login E senha iguais ao BD simulado
     if (user) { // se tiver, ele salva no local storage, guarda na variavel "usuariologado" e usa o 
       this.usuarioLogado = user; // router.navigate para mandar cada perfil para sua home certa
 
       localStorage.setItem('usuarioLogado', JSON.stringify(user));
-      
+
       if (user.perfil === 'ADM') {
         this.router.navigate(['/admin']);
       } else {
@@ -54,11 +54,17 @@ export class AuthService {
   }
 
   private filmes = [ // lista de filmes mockada pra não iniciar sem nd
-    { id: 1, titulo: 'Interestelar', genero: 'Ficção Científica', ano: 2014, capa: 'https://cdn.ome.lt/legacy/images/galerias/Interstellar/Interstellar-poster-11ago2014-01.jpg' },
-    { id: 2, titulo: 'Batman', genero: 'Ação', ano: 2008, capa: 'https://upload.wikimedia.org/wikipedia/pt/d/d1/The_Dark_Knight.jpg' }
+    { id: 1, titulo: 'Interestelar', genero: 'Ficção Científica', ano: 2014, capa: 'https://cdn.ome.lt/legacy/images/galerias/Interstellar/Interstellar-poster-11ago2014-01.jpg', favorito: false },
+    { id: 2, titulo: 'Batman', genero: 'Ação', ano: 2008, capa: 'https://upload.wikimedia.org/wikipedia/pt/d/d1/The_Dark_Knight.jpg', favorito: false }
   ];
   getFilmes() { return this.filmes; }
-
+  
+  alternarFavorito(id: number) {
+    const filme = this.filmes.find(f => f.id === id);
+    if (filme) {
+      filme.favorito = !filme.favorito;
+    }
+  }
   excluirFilme(id: number) {
     this.filmes = this.filmes.filter(f => f.id !== id);
   } // o filme que tiver o id igual ao id que passei cai na peneira e é cortado

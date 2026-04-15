@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PesquisaUsuarios } from './pesquisa-usuarios';
+import { ModalFilme } from './modal-filme';
 
-describe('PesquisaUsuarios', () => {
-  let component: PesquisaUsuarios;
-  let fixture: ComponentFixture<PesquisaUsuarios>;
+describe('ModalFilme', () => {
+  let component: ModalFilme;
+  let fixture: ComponentFixture<ModalFilme>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PesquisaUsuarios],
+      imports: [ModalFilme],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(PesquisaUsuarios);
+    fixture = TestBed.createComponent(ModalFilme);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

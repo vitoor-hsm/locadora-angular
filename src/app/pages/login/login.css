@@ -13,6 +13,12 @@
   height: 100vh;
   gap: 20px;
 }
+app-icone {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+  color: var(--primary-color, #f82732);
+}
 .btn-contraste{
   background-color: transparent;
   border: 1ox solid var(--primary-color);
@@ -93,3 +99,4 @@ button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
+

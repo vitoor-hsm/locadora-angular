@@ -11,16 +11,25 @@
     <div class="movie-cardie adm-card" *ngFor="let filme of listaFilmes">
       <img [src]="filme.capa" [alt]="filme.titulo">
 
-      <div class="card-info"> 
+      <div class="card-info">
         <h3>{{ filme.titulo }}</h3>
         <p>{{ filme.genero }}</p>
       </div>
 
       <div class="adm-actions">
-        <button class="btn-view" [routerLink]="['/admin/filme', filme.id]" title="Visualizar">👁️</button>
-        <button class="btn-edit" [routerLink]="['/admin/filme/editar', filme.id]" title="Editar"> ✏️</button>
-        <button class="btn-delete" (click)="remover(filme.id)" title="Excluir">🗑️</button>
+        <button class="btn-acao btn-view" [routerLink]="['/admin/filme', filme.id]" title="Visualizar">
+          <app-icone nome="olho" tamanho="20px"></app-icone>
+        </button>
+
+        <button class="btn-acao btn-edit" [routerLink]="['/admin/filme/editar', filme.id]" title="Editar">
+          <app-icone nome="editar" tamanho="20px"></app-icone>
+        </button>
+
+        <button class="btn-acao btn-delete" (click)="remover(filme.id)" title="Excluir">
+          <app-icone nome="excluir" tamanho="20px"></app-icone>
+        </button>
       </div>
     </div>
   </div>
 </div>
+

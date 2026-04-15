@@ -5,33 +5,46 @@
         <a routerLink="/admin/usuarios" class="btn-voltar">
             <span>⬅</span> Voltar para a Lista
         </a>
-</div>
+    </div>
 
     <div class="card-form">
         <h2>{{ isEdicao ? 'Editar Usuário' : 'Novo Usuário' }}</h2>
         <hr>
 
-        <form (ngSubmit)="salvar()">
+        <form [formGroup]="usuarioForm" (ngSubmit)="salvar()">
             <div class="form-group">
                 <label>Nome Completo</label>
-                <input type="text" [(ngModel)]="usuario.nome" name="nome" required placeholder="Ex: João Silva">
+                <input type="text" formControlName="nome" placeholder="Ex: João Silva"
+                    [class.is-invalid]="usuarioForm.get('nome')?.invalid && usuarioForm.get('nome')?.touched">
+                <small class="error-msg" *ngIf="usuarioForm.get('nome')?.invalid && usuarioForm.get('nome')?.touched">
+                    Nome é obrigatório (mín. 3 letras).
+                </small>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label>E-mail</label>
-                    <input type="email" [(ngModel)]="usuario.email" name="email" required placeholder="joao@email.com">
+                    <input type="email" formControlName="email" placeholder="joao@email.com"
+                        [class.is-invalid]="usuarioForm.get('email')?.invalid && usuarioForm.get('email')?.touched">
+                    <small class="error-msg"
+                        *ngIf="usuarioForm.get('email')?.invalid && usuarioForm.get('email')?.touched">
+                        Insira um e-mail válido.
+                    </small>
                 </div>
 
                 <div class="form-group">
                     <label>Telefone</label>
-                    <input type="text" [(ngModel)]="usuario.telefone" name="telefone" placeholder="(00) 00000-0000">
+                    <input type="text" formControlName="telefone" placeholder="Somente números (ex: 85988887777)">
+                    <small class="error-msg"
+                        *ngIf="usuarioForm.get('telefone')?.invalid && usuarioForm.get('telefone')?.touched">
+                        Insira apenas os números com DDD (10 ou 11 dígitos).
+                    </small>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Perfil de Acesso</label>
-                <select [(ngModel)]="usuario.perfil" name="perfil">
+                <select formControlName="perfil">
                     <option value="USER">Usuário Comum (USER)</option>
                     <option value="ADM">Administrador (ADM)</option>
                 </select>
@@ -39,7 +52,7 @@
 
             <div class="form-acoes">
                 <button type="button" class="btn-cancelar" routerLink="/admin/usuarios">Cancelar</button>
-                <button type="submit" class="btn-salvar">
+                <button type="submit" class="btn-salvar" [disabled]="usuarioForm.invalid">
                     {{ isEdicao ? 'Atualizar Dados' : 'Cadastrar Usuário' }}
                 </button>
             </div>

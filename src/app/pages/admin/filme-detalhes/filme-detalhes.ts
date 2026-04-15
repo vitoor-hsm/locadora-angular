@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { MenuLateral } from '../../../components/menu-lateral/menu-lateral';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 
+
 @Component({
   selector: 'app-filme-detalhes',
   standalone: true,
@@ -25,13 +26,11 @@ export class FilmeDetalhesComponent implements OnInit {
     
     if (dados) {
       const filmes = JSON.parse(dados);
-      
       const filmeEncontrado = filmes.find((f: any) => f.id === id);
 
       if (filmeEncontrado) {
         this.filme = filmeEncontrado;
       } else {
-
         this.filme = null; 
       }
     }

@@ -57,28 +57,41 @@
   cursor: pointer;
 }
 
+/* Estilo base para os botões de ação */
 .adm-actions {
   display: flex;
   justify-content: space-around;
-  padding: 10px;
-  background: rgba(0,0,0,0.05);
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.03);
   border-top: 1px solid var(--input-border);
 }
 
-.adm-actions button {
+.btn-acao {
   background: none;
   border: none;
-  font-size: 1.2rem;
   cursor: pointer;
-  transition: transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 5px;
 }
 
-.adm-actions button:hover {
+.btn-acao:hover {
   transform: scale(1.2);
 }
 
-.btn-delete:hover { color: #ff4d4d; }
-.btn-edit:hover { color: #007bff; }
+.btn-view app-icone {
+  color: #4a90e2; 
+}
+
+.btn-edit app-icone {
+  color: #f39c12; 
+}
+
+.btn-delete app-icone {
+  color: #f82732; 
+}
 
 .movie-grid {
   display: grid;
@@ -133,10 +146,4 @@
   margin-top: 5px;
 }
 
-.adm-actions {
-  display: flex;
-  justify-content: space-around;
-  padding: 10px;
-  background: rgba(0, 0, 0, 0.03);
-}
-
+/* alto contraste so funcionou no css global */

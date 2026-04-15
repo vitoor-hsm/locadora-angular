@@ -3,20 +3,44 @@
     padding: 40px;
     max-width: 1100px;
     margin: 0 auto;
+    min-height: calc(100vh - 80px); 
 }
 
+/* Ajuste no Header para alinhar Título e Busca */
 .header-pagina {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: 30px 0;
+    gap: 20px;
+}
+
+/* CONTAINER DE BUSCA (Ajustado para o novo ícone) */
+.busca-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.busca-container app-icone {
+    position: absolute;
+    left: 15px;
+    color: #666;
+    pointer-events: none; /* O clique passa para o input abaixo */
 }
 
 .busca-container input {
-    padding: 12px 20px 12px 45px;
+    padding: 12px 20px 12px 45px; /* Espaço na esquerda para o ícone */
     border-radius: 30px;
     border: 1px solid #ddd;
     width: 350px;
+    transition: 0.3s;
+}
+
+.busca-container input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 8px rgba(var(--primary-color-rgb), 0.2);
 }
 
 /* Tabela e Cards */
@@ -32,8 +56,7 @@ table {
     border-collapse: collapse;
 }
 
-th,
-td {
+th, td {
     padding: 18px;
     text-align: left;
     border-bottom: 1px solid #eee;
@@ -47,16 +70,17 @@ th {
     letter-spacing: 1px;
 }
 
-/* Botões e Badges */
+/* Botões de Ação */
 .acoes {
     display: flex;
     gap: 8px;
+    justify-content: center; 
 }
 
 .btn-acao {
     border: none;
-    width: 35px;
-    height: 35px;
+    width: 38px;
+    height: 38px;
     border-radius: 8px;
     cursor: pointer;
     display: flex;
@@ -65,85 +89,105 @@ th {
     transition: 0.2s;
 }
 
-.btn-ver {
-    background: #e3f2fd;
-    color: #1976d2;
-}
-
-.btn-editar {
-    background: #fff3e0;
-    color: #f57c00;
-}
-
-.btn-excluir {
-    background: #ffebee;
-    color: #d32f2f;
-}
+/* Cores dos botões usando currentColor para o ícone herdar */
+.btn-ver { background: #e3f2fd; color: #1976d2; }
+.btn-editar { background: #fff3e0; color: #f57c00; }
+.btn-excluir { background: #ffebee; color: #d32f2f; }
 
 .btn-acao:hover {
     transform: translateY(-2px);
-    filter: brightness(0.9);
+    filter: brightness(0.95);
 }
 
-.badge {
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 11px;
-    font-weight: bold;
-    text-transform: uppercase;
+
+.header-acoes {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
 }
+
 .btn-adicionar {
-  background-color: #28a745; /* Verde */
-  color: white;
-  margin-left: 80%;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.3s;
 }
-
 .btn-adicionar:hover {
-  background-color: #218838;
+  background-color: rgb(117, 17, 17);
   transform: translateY(-2px);
 }
 
 .btn-voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     text-decoration: none;
     border: 1px solid var(--primary-color);
     color: var(--primary-color);
     padding: 8px 16px;
     border-radius: 20px;
+    margin-bottom: 20px;
     transition: 0.3s;
 }
 
-.btn-voltar:hover {
-    background: var(--primary-color);
-    color: #fff;
-}
-
-/* Detalhes (Accordion) */
-.linha-detalhes td {
-    background-color: #fcfcfc;
-    padding: 0;
-}
-
+/* Detalhes do Usuário */
 .detalhes-usuario-card {
     padding: 20px 40px;
+    background-color: #fcfcfc;
     border-left: 4px solid #1976d2;
-    animation: slideDown 0.3s ease-out;
+    animation: slideDown 0.5s ease-out;
 }
-
-.info-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-}
-
 .status-ativo {
     color: #28a745;
     font-weight: bold;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+    gap: 20px;
+}
+
+/* MODO ALTO CONTRASTE (Melhorado) */
+:host-context(body.high-contrast) {
+    --text-color: #ffff00;
+    --primary-color: #ffff00;
+}
+
+:host-context(body.high-contrast) .main-content *,
+:host-context(body.high-contrast) .tabela-container,
+:host-context(body.high-contrast) input {
+    color: #ffff00 !important;
+    background-color: #000 !important;
+    border-color: #ffff00 !important;
+    box-shadow: none !important;
+}
+
+:host-context(body.high-contrast) .btn-acao:hover,
+:host-context(body.high-contrast) .btn-voltar:hover,
+:host-context(body.high-contrast) .btn-adicionar:hover {
+    background-color: #ffff00 !important;
+    color: #000 !important;
+}
+
+:host-context(body.high-contrast) app-icone {
+    color: #ffff00 !important;
+}
+
+:host-context(body.high-contrast) {
+    background-color: #000000 !important;
 }
 
 @keyframes slideDown {
@@ -155,26 +199,4 @@ th {
     to {
         opacity: 1;
     }
-}
-
-
-
-/*  MODO ALTO CONTRASTE (UNIFICADO) */
-:host-context(body.high-contrast) .main-content *,
-:host-context(body.high-contrast) .tabela-container,
-:host-context(body.high-contrast) input {
-    color: #ffff00 !important;
-    background-color: #000 !important;
-    border-color: #ffff00 !important;
-    box-shadow: none !important;
-}
-
-:host-context(body.high-contrast) .btn-acao:hover,
-:host-context(body.high-contrast) .btn-voltar:hover {
-    background-color: #ffff00 !important;
-    color: #000 !important;
-}
-
-:host-context(body.high-contrast) .detalhes-usuario-card {
-    border-left: 4px solid #ffff00 !important;
 }

@@ -1,27 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MenuLateral } from '../../../components/menu-lateral/menu-lateral';
-import { AuthService } from '../../../services/auth';
 import { RouterModule } from '@angular/router';
+import { IconeComponent } from '../../../components/icone/icone';
+import { ToastService } from '../../../core/services/toast';
+import { ModalService } from '../../../services/modal'; 
 
 @Component({
   selector: 'app-home-adm',
-  imports: [CommonModule, MenuLateral, RouterModule],
+  standalone: true,
+  imports: [CommonModule, MenuLateral, RouterModule, IconeComponent], 
   templateUrl: './home-adm.html',
   styleUrl: './home-adm.css',
 })
 export class HomeAdm implements OnInit {
   listaFilmes: any[] = [];
 
-  constructor() { }
-  
+  constructor(
+    private toastService: ToastService,
+    private modalService: ModalService // 3. Injetou o controle remoto
+  ) { }
+
   ngOnInit() {
     this.atualizarListaDaTela();
   }
 
   atualizarListaDaTela() {
     const dadosSalvos = localStorage.getItem('meusFilmes');
-    
     if (dadosSalvos) {
       this.listaFilmes = JSON.parse(dadosSalvos);
     } else {
@@ -33,12 +38,18 @@ export class HomeAdm implements OnInit {
     }
   }
 
+
   remover(id: number) {
-    if (confirm("tem certeza que deseja excluir este filme?")) {
-      this.listaFilmes = this.listaFilmes.filter(f => f.id !== id);
-      localStorage.setItem('meusFilmes', JSON.stringify(this.listaFilmes));
-    }
+    const filme = this.listaFilmes.find(f => f.id === id);
+
+    this.modalService.abrir({
+      titulo: 'Excluir Filme',
+      mensagem: `Tem certeza que deseja remover "${filme?.titulo}"?`,
+      confirmar: () => {
+        this.listaFilmes = this.listaFilmes.filter(f => f.id !== id);
+        localStorage.setItem('meusFilmes', JSON.stringify(this.listaFilmes));
+        this.toastService.exibir('Filme removido com sucesso!', 'sucesso');
+      }
+    });
   }
-
-
 }

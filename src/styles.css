@@ -1,71 +1,102 @@
-/* --- TEMA PADRÃO (CLARO) --- */
+/* VARIÁVEIS DE TEMA (Design System)*/
 
 :root {
-  --bg-color: #dbcfcf;        /* Fundo cinza bem claro */
-  --form-bg: #ffffff;        /* Card branco */
-  --text-color: #333333;     /* Texto quase preto */
-  --input-bg: #ffffff;       /* Input branco */
-  --input-border: #cccccc;   /* Borda cinza */
-  --primary-color: #e50914;  /* Vermelho  */
-  --label-color: #666666;    /* Labels cinza escuro */
+  /* Tema Padrão (Claro) */
+  --bg-color: #dbcfcf;
+  --form-bg: #ffffff;
+  --text-color: #333333;
+  --input-bg: #ffffff;
+  --input-border: #cccccc;
+  --primary-color: #e50914; 
+  --label-color: #666666;
+  --icon-color: inherit;
 }
 
-/* --- TEMA ALTO CONTRASTE --- */
+/* Tema Alto Contraste */
 body.high-contrast {
-  --bg-color: #000000;       /* Fundo preto puro */
-  --form-bg: #000000;        /* Card preto */
-  --text-color: #ffff00;     /* Texto AMARELO  */
-  --input-bg: #000000;       /* Input preto */
-  --input-border: #ffff00;   /* Borda amarela */
-  --primary-color: #a6ff01;  
+  --bg-color: #000000 !important;
+  --form-bg: #000000;
+  --text-color: #ffff00;   
+  --input-bg: #000000;
+  --input-border: #ffff00;
+  --primary-color: #ffff00;
   --label-color: #ffff00;
-
+  --icon-color: #ffff00;
+  min-height: 100vh;
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  font-family: Arial, sans-serif;
-  transition: all 0.3s ease;
-}
+/* RESETS E CONFIGURAÇÕES GERAIS*/
 
 * {
   box-sizing: border-box;
 }
 
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%; 
+  width: 100%;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
 
-h1, h2 {
+h1, h2, h3, h4, p, span {
   margin-top: 0;
-  padding-top: 20px; 
-}
-body.high-contrast .conteudo-da-pagina h1 {
-    color: #ffff00 !important; 
-    background: transparent !important;
-}
-body.high-contrast .admin-header {
-    border-bottom: 2px solid #ffff00 !important; 
-    background: #000 !important;
+  color: var(--text-color); 
 }
 
-body.high-contrast .admin-header h1 {
-    color: #ffffff !important;
+hr {
+  border: 0;
+  border-top: 1px solid var(--input-border);
+  opacity: 0.3;
+}
+
+/*REGRAS GLOBAIS DE ALTO CONTRASTE */
+
+/* garante que containers específicos fiquem pretos */
+body.high-contrast .conteudo-da-pagina,
+body.high-contrast .content-container,
+body.high-contrast .admin-header {
+  background-color: #000000 !important;
+  box-shadow: none !important;
+}
+
+
+body.high-contrast h1, 
+body.high-contrast h2, 
+h3, p {
+  color: var(--text-color) !important;
+}
+
+/* ajuste específico para o Header Admin */
+body.high-contrast .admin-header {
+  border-bottom: 2px solid var(--input-border) !important;
 }
 
 body.high-contrast .admin-header h1::after {
-    background: #ffff00 !important;
+  background-color: var(--primary-color) !important;
 }
 
-body.high-contrast .conteudo-da-pagina,
-body.high-contrast .content-container {
-    background-color: #000 !important;
-    box-shadow: none !important;
+/*COMPONENTES GLOBAIS (ÍCONES E SVGS)*/
+
+/*força todos os SVGs dentro do app-icone a seguirem o tema de contraste */
+body.high-contrast app-icone:not(.hamburger app-icone) svg,
+body.high-contrast app-icone:not(.hamburger app-icone) path {
+  fill: #ffff00 !important;
+  stroke: #ffff00 !important;
 }
 
-body.high-contrast hr {
-    border-color: #ffff00 !important;
+body.high-contrast {
+  background-color: #000 !important;
+  color: #ffff00 !important;
 }
-
+/* app-icone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--icon-color);
+} */

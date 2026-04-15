@@ -23,6 +23,18 @@
   font-weight: bold;
 }
 
+/* Bordas de erro */
+.is-invalid {
+    border: 2px solid #e50914 !important;
+}
+
+.error-msg {
+    color: #e50914;
+    font-size: 0.75rem;
+    margin-top: 4px;
+    font-weight: 500;
+}
+
 .group input {
   padding: 12px;
   border: 1px solid var(--input-border);
@@ -45,7 +57,11 @@
   cursor: pointer;
   flex: 1;
 }
-
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(1);
+}
 .btn-cancelar {
   background: #6c757d;
   color: white;
@@ -70,4 +86,13 @@
   padding-top: 0 !important; 
   margin-top: 0 !important;
   text-align: center;
+}
+body.high-contrast .is-invalid {
+    border: 2px dashed #ffff00 !important;
+    background-color: #220000 !important;
+}
+
+body.high-contrast .error-msg {
+    color: #ffff00 !important;
+    text-decoration: underline;
 }

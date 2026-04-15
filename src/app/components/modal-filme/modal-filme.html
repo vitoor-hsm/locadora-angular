@@ -1,0 +1,41 @@
+<div class="modal-overlay" *ngIf="exibir" (click)="fecharModal()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+
+        <div class="modal-header">
+            <h2>{{ filme?.titulo }}</h2>
+            <button class="btn-fechar-topo" (click)="fecharModal()" aria-label="Fechar modal">
+                <span class="x-icon">×</span>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <img [src]="filme?.capa" [alt]="filme?.titulo" class="capa-detalhe">
+
+            <div class="info-detalhada">
+                <p class="linha-info">
+                    <app-icone nome="claquete" class="icone-detalhe"></app-icone>
+                    <span><strong>Gênero:</strong> {{ filme?.genero }}</span>
+                </p>
+
+                <p class="linha-info">
+                    <app-icone nome="calendario" class="icone-detalhe"></app-icone>
+                    <span><strong>Ano:</strong> {{ filme?.ano }}</span>
+                </p>
+
+                <hr class="divisor">
+
+                <div class="sinopse-container">
+                    <strong>Sinopse:</strong>
+                    <p class="sinopse">{{ filme?.descricao || 'Sem descrição.' }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn-voltar" (click)="fecharModal()">
+                <app-icone nome="voltar"></app-icone>
+                Voltar para a vitrine
+            </button>
+        </div>
+    </div>
+</div>

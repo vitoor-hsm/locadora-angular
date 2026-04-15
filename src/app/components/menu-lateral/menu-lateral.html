@@ -1,35 +1,42 @@
 <button class="hamburger" [class.active]="isOpens" (click)="toggleMenu()">
-  <span>{{ isOpens ? '✕' : '☰' }}</span>
-</button> <!-- se a variavel isOpens for true, o angular adiciona a classe active ao button, permitindo mudar a cor e girar ele e o clickinverte o valor de isOpens -->
+    <app-icone [nome]="isOpens ? 'fechar' : 'menu'" tamanho="24px"></app-icone>
+</button>
 
-<div class="sidebar" [class.open] = "isOpens">
+<div class="sidebar" [class.open]="isOpens">
     <div class="menu-content" style="display: flex; flex-direction: column; height: 100%;">
         <h2>Menu</h2>
         <hr style="margin: 0 25px 20px; opacity: 0.2;">
 
         <ul style="flex-grow: 1;">
-            <ng-container *ngIf="perfilUsuario === 'ADM'"><!-- se o perfil não for adm, nem aparece -->
+            <ng-container *ngIf="perfilUsuario === 'ADM'">
                 <li [routerLink]="['/admin/filme/editar/novo']" (click)="toggleMenu()">
-                    <i class="icon">🎬</i> Cadastrar Filmes
+                    <app-icone nome="filme"></app-icone>
+                    Cadastrar Filmes
                 </li>
-                
                 <li [routerLink]="['/admin/usuarios']" (click)="toggleMenu()">
-                    <i class="icon">👥</i> Pesquisar Usuários
+                    <app-icone nome="usuario"></app-icone>
+                    Pesquisar Usuários
                 </li>
             </ng-container>
 
             <ng-container *ngIf="perfilUsuario === 'USER'">
-                <li  (click)="executarNovidades()">
-                    <i class="icon">⭐</i> Ver Novidades
+                <li (click)="executarFavoritos()">
+                    <app-icone nome="favorito"></app-icone>
+                    Ver Favoritos
+                </li>
+                <li (click)="executarNovidades()">
+                    <app-icone nome="novidades"></app-icone> Ver Novidades
                 </li>
             </ng-container>
 
             <li (click)="alternarContraste()">
-                <i class="icon">🌓</i> Alto contraste
+                <app-icone nome="contraste"></app-icone>
+                Alto contraste
             </li>
 
-            <li (click)="sair()" class="logout">
-                <i class="icon">🏃</i> Sair
+            <li *ngIf="perfilUsuario" (click)="abrirConfirmacaoSair()" class="logout">
+                <app-icone nome="sair"></app-icone>
+                Sair
             </li>
         </ul>
     </div>

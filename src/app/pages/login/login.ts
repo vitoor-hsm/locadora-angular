@@ -2,11 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth';
+import { IconeComponent } from '../../components/icone/icone';
+import { MenuLateral } from '../../components/menu-lateral/menu-lateral';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, IconeComponent, MenuLateral],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })

@@ -2,19 +2,22 @@
 
 <div class="main-content">
     <a routerLink="/admin" class="btn-voltar">
-        <span>⬅</span> Voltar ao Painel
+        <app-icone nome="voltar" tamanho="16px"></app-icone>
+        <span> Voltar ao Painel</span>
     </a>
     <div class="header-acoes">
         <br>
         <button class="btn-adicionar" [routerLink]="['/admin/usuarios/form/novo']">
-            ➕ Novo Usuário
+         <app-icone nome="adicionar" tamanho="18px"></app-icone>
+            Novo Usuário
         </button>
     </div>
     <div class="header-pagina">
         <h1>Gerenciar Usuários</h1>
 
         <div class="busca-container">
-            <input type="text" [(ngModel)]="termoBusca" placeholder="🔍 Pesquisar usuário por nome...">
+            <app-icone nome="busca" tamanho="18px" class="icon-busca"></app-icone>
+            <input type="text" [(ngModel)]="termoBusca" placeholder="Pesquisar usuário por nome...">
         </div>
     </div>
 
@@ -40,12 +43,15 @@
                         </td>
                         <td class="acoes">
                             <button class="btn-acao btn-ver" (click)="alternarExpansao(user.id)" title="Ver Detalhes">
-                                {{ usuarioExpandidoId === user.id ? '✖️' : '👁️' }}
+                               <app-icone [nome]="usuarioExpandidoId === user.id ? 'fechar' : 'ver'"></app-icone>
                             </button>
 
-                            <button class="btn-acao btn-editar" [routerLink]="['/admin/usuarios/form', user.id]"
-                                title="Editar">✏️</button>
-                            <button class="btn-acao btn-excluir" (click)="excluir(user.id)" title="Excluir">🗑️</button>
+                            <button class="btn-acao btn-editar" [routerLink]="['/admin/usuarios/form', user.id]" title="Editar">
+                                <app-icone nome="editar"></app-icone>
+                            </button>
+                            <button class="btn-acao btn-excluir" (click)="excluir(user.id)" title="Excluir">
+                                <app-icone nome="excluir"></app-icone>
+                            </button>
                         </td>
                     </tr>
 
