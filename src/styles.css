@@ -100,3 +100,84 @@ body.high-contrast {
   justify-content: center;
   color: var(--icon-color);
 } */
+
+/* Estilização Global da Paginação */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 40px 0;
+  padding-bottom: 20px;
+}
+
+.page-numbers {
+  display: flex;
+  gap: 8px;
+}
+
+.pagination button {
+  padding: 8px 16px;
+  border: 2px solid #444;
+  background-color: #121212; 
+  color: #ffffff; 
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
+  min-width: 44px;
+}
+
+.pagination .btn-nav {
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #333333;
+  border-color: #e50914; 
+  color: #e50914;
+}
+
+.pagination button.active {
+  background-color: #e50914; 
+  border-color: #e50914;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(229, 9, 20, 0.5);
+}
+
+.pagination button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  border-color: #222;
+}
+
+/* --- PAGINAÇÃO EM ALTO CONTRASTE (GLOBAL) --- */
+
+body.high-contrast .pagination button {
+    background-color: #000 !important;
+    border: 2px solid #ffff00 !important;
+    color: #ffff00 !important;
+    border-radius: 0 !important; 
+}
+
+
+body.high-contrast .pagination button.active {
+    background-color: #ffff00 !important; 
+    color: #000 !important;            
+    font-weight: 900 !important;
+}
+
+
+body.high-contrast .pagination button:hover:not(:disabled) {
+    background-color: #ffff00 !important;
+    color: #000 !important;
+    text-decoration: underline;
+}
+
+body.high-contrast .pagination button:disabled {
+    border-color: #555 !important;
+    color: #555 !important;
+    opacity: 1 !important; 
+}

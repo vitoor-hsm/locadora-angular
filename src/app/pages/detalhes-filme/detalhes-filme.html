@@ -3,15 +3,15 @@
 <div class="main-content">
   <a routerLink="/user" class="btn-voltar">⬅ Voltar</a>
 
-  <div class="detalhe-container" *ngIf="filme">
-    <img [src]="filme.capa" class="capa-grande">
+  <div class="detalhe-container" *ngIf="movie">
+    <img [src]="movie.posterUrl" class="capa-grande">
     
     <div class="info-detalhada">
-      <h1>{{ filme.titulo }}</h1>
+      <h1>{{ movie.title }}</h1>
       <div class="meta">
-        <span>{{ filme.genero }}</span> • <span>{{ filme.ano }}</span>
+        <span>{{ movie.genre }}</span> • <span>{{ movie.releaseYear }}</span>
       </div>
-      <p class="descricao">{{ filme.descricao }}</p>
+      <p class="descricao">{{ movie.synopsis }}</p>
     </div>
   </div>
 </div>

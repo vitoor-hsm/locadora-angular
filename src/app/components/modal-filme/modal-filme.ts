@@ -10,7 +10,7 @@ import { IconeComponent } from '../icone/icone';
   styleUrl: './modal-filme.css',
 })
 export class ModalFilmeComponent {
-  @Input() filme: any = null;
+  @Input() movie: any = null;
   @Input() exibir: boolean = false;
   @Output() fechar = new EventEmitter<void>();
 

@@ -7,47 +7,47 @@
         <form [formGroup]="filmeForm" (ngSubmit)="salvar()">
 
             <div class="group">
-                <label>Título</label>
-                <input type="text" formControlName="titulo"
-                    [class.is-invalid]="filmeForm.get('titulo')?.invalid && filmeForm.get('titulo')?.touched">
-                <small class="error-msg" *ngIf="filmeForm.get('titulo')?.invalid && filmeForm.get('titulo')?.touched">
+                <label for="title">Título</label>
+                <input type="text" formControlName="title"
+                    [class.is-invalid]="filmeForm.get('title')?.invalid && filmeForm.get('title')?.touched">
+                <small class="error-msg" *ngIf="filmeForm.get('title')?.invalid && filmeForm.get('title')?.touched">
                     O título é obrigatório (mín. 3 letras).
                 </small>
             </div>
             <div class="group">
-                <label for="ano">Ano de Lançamento</label>
-                <input type="number" id="ano" formControlName="ano" placeholder="Ex: 2024"
-                    [class.is-invalid]="filmeForm.get('ano')?.invalid && filmeForm.get('ano')?.touched">
-                <small class="error-msg" *ngIf="filmeForm.get('ano')?.invalid && filmeForm.get('ano')?.touched">
+        <label for="releaseYear">Ano de Lançamento</label>
+                <input type="number" id="releaseYear" formControlName="releaseYear" placeholder="Ex: 2024"
+                    [class.is-invalid]="filmeForm.get('releaseYear')?.invalid && filmeForm.get('releaseYear')?.touched">
+                <small class="error-msg" *ngIf="filmeForm.get('releaseYear')?.invalid && filmeForm.get('releaseYear')?.touched">
                     Ano deve ser entre 1895 e 2026.
                 </small>
             </div>
 
             <div class="group">
-                <label for="descricao">Descrição / Sinopse</label>
-                <textarea id="descricao" formControlName="descricao" rows="4" placeholder="Digite o resumo do filme..."
-                    [class.is-invalid]="filmeForm.get('descricao')?.invalid && filmeForm.get('descricao')?.touched"></textarea>
+                <label for="synopsis">Descrição / Sinopse</label>
+                <textarea id="synopsis" formControlName="synopsis" rows="4" placeholder="Digite o resumo do filme..."
+                    [class.is-invalid]="filmeForm.get('synopsis')?.invalid && filmeForm.get('synopsis')?.touched"></textarea>
                 <small class="error-msg"
-                    *ngIf="filmeForm.get('descricao')?.invalid && filmeForm.get('descricao')?.touched">
-                    A descrição é obrigatória (máx. 500 caracteres).
+                    *ngIf="filmeForm.get('synopsis')?.invalid && filmeForm.get('synopsis')?.touched">
+                    A sinopse é obrigatória (máx. 500 caracteres).
                 </small>
             </div>
             <div class="group">
                 <label>Gênero</label>
-                <input type="text" formControlName="genero"
-                    [class.is-invalid]="filmeForm.get('genero')?.invalid && filmeForm.get('genero')?.touched">
+                <input type="text" formControlName="genre"
+                    [class.is-invalid]="filmeForm.get('genre')?.invalid && filmeForm.get('genre')?.touched">
 
-                <small class="error-msg" *ngIf="filmeForm.get('genero')?.invalid && filmeForm.get('genero')?.touched">
+                <small class="error-msg" *ngIf="filmeForm.get('genre')?.invalid && filmeForm.get('genre')?.touched">
                     O gênero é obrigatório (mín. 3 letras).
                 </small>
             </div>
 
             <div class="group">
                 <label>URL da Capa</label>
-                <input type="text" formControlName="capa" placeholder="https://exemplo.com/imagem.jpg"
-                    [class.is-invalid]="filmeForm.get('capa')?.invalid && filmeForm.get('capa')?.touched">
+                <input type="text" formControlName="posterUrl" placeholder="https://exemplo.com/imagem.jpg"
+                    [class.is-invalid]="filmeForm.get('posterUrl')?.invalid && filmeForm.get('posterUrl')?.touched">
 
-                    <small class="error-msg" *ngIf="filmeForm.get('capa')?.invalid && filmeForm.get('capa')?.touched">
+                    <small class="error-msg" *ngIf="filmeForm.get('posterUrl')?.invalid && filmeForm.get('posterUrl')?.touched">
                     A URL da capa é obrigatória.
                 </small>
             </div>

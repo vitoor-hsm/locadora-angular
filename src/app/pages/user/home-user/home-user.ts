@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MenuLateral } from '../../../components/menu-lateral/menu-lateral';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { IconeComponent } from '../../../components/icone/icone';
 import { ModalService } from '../../../services/modal';
 import { ModalFilmeComponent } from '../../../components/modal-filme/modal-filme';
-
-
+import { AuthService } from '../../../services/auth';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-home-user',
@@ -16,82 +16,118 @@ import { ModalFilmeComponent } from '../../../components/modal-filme/modal-filme
   styleUrl: './home-user.css',
 })
 export class HomeUserComponent implements OnInit {
-  filmes: any[] = [];// Array que guarda a lista de filmes que aparece na tela
-  favoritos: number[] = [];// Array de IDs dos filmes que o usuário curtiu
-  exibindoApenasFavoritos: boolean = false;
-  filmeSelecionado: any;
-  mostrarModalDetalhes: boolean = false;
+  movies: any[] = [];
+  favorites: number[] = [];
+  isShowingFavoritesOnly: boolean = false;
+  selectedMovie: any;
+  showDetailsModal: boolean = false;
+  currentPage: number = 0;
+  totalPages: number = 0;
+  isSortedByNew: boolean = false;
+  toastService: any;
+  http: any;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
-  this.route.queryParams.subscribe(params => {
-    //verifica se deve filtrar por favoritos
-    this.exibindoApenasFavoritos = (params['filtro'] === 'favoritos');
-    
-    //verifica se deve ordenar por novidades
-    const ordenarPorNovidades = (params['ordem'] === 'novidades');
-    
-    this.carregarFavoritos(); // crrega os IDs curtidos do localStorage
-    this.carregarFilmes(ordenarPorNovidades);    // monta a lista (já filtrando se necessário)
-  });
-  }
-  
-  abrirModalDetalhes(filme: any) {
-    this.filmeSelecionado = filme;
-    this.mostrarModalDetalhes = true;
-  }
-  fecharModalDetalhes() {
-    this.mostrarModalDetalhes = false;
-    this.filmeSelecionado = null;
+    this.authService.favoritesFilter$.subscribe(isShowing => {
+      this.isShowingFavoritesOnly = isShowing;
+      this.loadMovies();
+
+      this.authService.sortNewest$.subscribe(isNewest => {
+        this.isSortedByNew = isNewest;
+        this.loadMovies(); 
+      });
+    });
   }
 
-  carregarFilmes(ordenarPorNovidades: boolean = false) {
-    const dados = localStorage.getItem('meusFilmes'); //Vai no "banco de dados" do navegador buscar a string de filmes
-    let lista = dados ? JSON.parse(dados) : [];//Transforma essa string de volta em um objeto/array
-
-    if (ordenarPorNovidades) {
-      lista.sort((a: any, b: any) => b.ano - a.ano);
-    } //Se o parâmetro for verdadeiro, ele subtrai os anos. Se b.ano (2026) for maior que a.ano (2024), o resultado é positivo e o filme 
-
-    if (this.exibindoApenasFavoritos) {
-      lista = lista.filter((f: any) => this.favoritos.includes(f.id));
-    }
-    this.filmes = lista;
+  openDetailsModal(movie: any) { // Alterado de abrirModalDetalhes
+    this.selectedMovie = movie;
+    this.showDetailsModal = true;
   }
 
-
-  toggleFiltroFavoritos() {
-    this.exibindoApenasFavoritos = !this.exibindoApenasFavoritos;
-    this.carregarFilmes(); // Recarrega a lista aplicando (ou removendo) o filtro
+  closeDetailsModal() { // Alterado de fecharModalDetalhes
+    this.showDetailsModal = false;
+    this.selectedMovie = null;
   }
 
-  carregarFavoritos() {
-    const favs = localStorage.getItem('favoritos');
-    this.favoritos = favs ? JSON.parse(favs) : [];
+  loadMovies(sortByNew: boolean = this.isSortedByNew, page: number = 0) {
+    // 1. Pega o ID do usuário logado
+    const userJson = localStorage.getItem('loggedUser');
+    const user = userJson ? JSON.parse(userJson) : null;
+    const userId = user ? user.id : null;
+
+    const sortOrder = this.isSortedByNew ? 'releaseYear,desc' : 'title,asc';
+
+    // 2. Passa o userId para as chamadas do service
+    const call = this.isShowingFavoritesOnly
+      ? this.authService.getFavoriteMovies(page, userId)
+      : this.authService.getMovies(page, userId, sortOrder);
+
+    call.subscribe({
+      next: (data: any) => {
+        this.movies = data.content;
+        this.totalPages = data.totalPages;
+        this.currentPage = data.number;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Erro ao carregar filmes:', err)
+    });
   }
 
-  toggleFavorito(id: number) {
-    if (this.favoritos.includes(id)) {//ja ta na lista?
-      this.favoritos = this.favoritos.filter(favId => favId !== id);// se tiver remove
-    } else {
-      this.favoritos.push(id);// se n tiver, adc
-    }
-    localStorage.setItem('favoritos', JSON.stringify(this.favoritos));
-
-    if (this.exibindoApenasFavoritos) { //pra fazer o filme sumir se tirar enquanto ta atvio
-      this.carregarFilmes();
+  changePage(newPage: number) {
+    if (newPage >= 0 && newPage < this.totalPages) {
+      this.loadMovies(this.isSortedByNew, newPage);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
-  limparFiltro() {
+
+  toggleFavoritesFilter() { // Alterado de toggleFiltroFavoritos
+    this.isShowingFavoritesOnly = !this.isShowingFavoritesOnly;
+    this.loadMovies();
+  }
+
+  loadFavorites() { // Alterado de carregarFavoritos
+    const favs = localStorage.getItem('favorites'); // Chave no localStorage também para inglês
+    this.favorites = favs ? JSON.parse(favs) : [];
+  }
+
+
+  toggleFavorite(movie: any) {
+    if (!movie) return;
+
+    this.authService.toggleFavorite(movie.id).subscribe({
+      next: () => {
+        // 1. Inverte o valor atual (se for null/undefined, vira true)
+        const novoEstado = !movie.favorite && !movie.isFavorite;
+
+        // 2. Atualizamos TODAS as variações de nome para não ter erro
+        movie.favorite = novoEstado;
+        movie.isFavorite = novoEstado;
+
+        console.log("Estado atualizado para:", novoEstado);
+
+        // 3. Força o Angular a redesenhar o componente na hora
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error("Erro:", err)
+    });
+  }
+
+  clearFilter() {
+    // 1. Avisa ao Service que o filtro de favoritos agora é FALSE
+    this.authService.updateFavoritesFilter(false);
+    this.authService.updateSortNewest(false)
     this.router.navigate(['/user']);
   }
 
-  isFavorito(id: number): boolean {
-    return this.favoritos.includes(id);
+  isFavorite(movie: any): boolean {
+    return movie.favoritedByCurrentUser;
   }
 }

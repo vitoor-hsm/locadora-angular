@@ -17,6 +17,8 @@ export class MenuLateral implements OnInit {
   isOpens = false;
   perfilUsuario: string = '';
   isLogado: boolean = false;
+  isShowingFavorites: boolean | undefined;
+  isSortedByNew: boolean | undefined;
 
   constructor(
     private authService: AuthService,
@@ -26,6 +28,17 @@ export class MenuLateral implements OnInit {
 
   ngOnInit() {
     this.carregarPerfil();
+    if (this.perfilUsuario === 'ADMIN') {
+      this.perfilUsuario = 'ADM';
+    }
+
+    this.authService.favoritesFilter$.subscribe(isShowing => {
+      this.isShowingFavorites = isShowing;
+
+      this.authService.sortNewest$.subscribe(isNewest => {
+        this.isSortedByNew = isNewest;
+      });
+    });
   }
 
   abrirConfirmacaoSair() {
@@ -41,38 +54,36 @@ export class MenuLateral implements OnInit {
   }
 
   carregarPerfil() {
-    const perfil = this.authService.getPerfil();
+    // Agora usamos o método que já criamos no authService
+    const role = this.authService.getRole();
 
-    if (perfil) {
-      this.perfilUsuario = perfil.toString().toUpperCase();
+    if (role) {
+      this.perfilUsuario = role.toUpperCase();
       this.isLogado = true;
-      console.log('Perfil carregado via Serviço:', this.perfilUsuario);
+      console.log('Role loaded via Service:', this.perfilUsuario);
     } else {
-      const salvo = localStorage.getItem('usuarioLogado');
-      if (salvo) {
-        const user = JSON.parse(salvo);
-        this.perfilUsuario = user?.perfil?.toUpperCase() || '';
-        this.isLogado = true;
-        console.log('Perfil carregado via LocalStorage:', this.perfilUsuario);
-      } else {
-        this.perfilUsuario = '';
-        this.isLogado = false;
-      }
+      // Se o service não tem nada, limpamos tudo
+      this.perfilUsuario = '';
+      this.isLogado = false;
     }
   }
 
   toggleMenu() {
+    this.carregarPerfil();
     this.isOpens = !this.isOpens;
   }
 
-  executarFavoritos() {
-    this.toggleMenu();
-    this.router.navigate(['/user'], { queryParams: { filtro: 'favoritos' } });
+  toggleFavorites() {
+    this.isShowingFavorites = !this.isShowingFavorites;
+    this.authService.updateFavoritesFilter(this.isShowingFavorites);
   }
 
-  executarNovidades() {
-    this.toggleMenu();
-    this.router.navigate(['/user'], { queryParams: { ordem: 'novidades' } });
+  toggleNewest() {
+    this.isSortedByNew = !this.isSortedByNew;
+
+    this.authService.updateSortNewest(this.isSortedByNew);
+
+    this.isOpens = false;
   }
 
   alternarContraste() {

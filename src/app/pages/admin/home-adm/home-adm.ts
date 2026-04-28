@@ -1,54 +1,77 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MenuLateral } from '../../../components/menu-lateral/menu-lateral';
 import { RouterModule } from '@angular/router';
 import { IconeComponent } from '../../../components/icone/icone';
 import { ToastService } from '../../../core/services/toast';
-import { ModalService } from '../../../services/modal'; 
+import { ModalService } from '../../../services/modal';
+import { AuthService } from '../../../services/auth';
 
 @Component({
   selector: 'app-home-adm',
   standalone: true,
-  imports: [CommonModule, MenuLateral, RouterModule, IconeComponent], 
+  imports: [CommonModule, MenuLateral, RouterModule, IconeComponent],
   templateUrl: './home-adm.html',
   styleUrl: './home-adm.css',
 })
 export class HomeAdm implements OnInit {
-  listaFilmes: any[] = [];
+  listaMovies: any[] = [];
+  currentPage: number = 0;
+  totalPages: number = 0;
+  movies: any[] = [];
 
   constructor(
     private toastService: ToastService,
-    private modalService: ModalService // 3. Injetou o controle remoto
+    private modalService: ModalService,
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
     this.atualizarListaDaTela();
   }
 
-  atualizarListaDaTela() {
-    const dadosSalvos = localStorage.getItem('meusFilmes');
-    if (dadosSalvos) {
-      this.listaFilmes = JSON.parse(dadosSalvos);
-    } else {
-      this.listaFilmes = [
-        { id: 1, titulo: 'Interestelar', genero: 'Ficção Científica', capa: 'https://m.media-amazon.com/images/I/71qzTzxzoCL.jpg', ano: 2014 },
-        { id: 2, titulo: 'Batman', genero: 'Ação', capa: 'https://m.media-amazon.com/images/I/818hyvdVfvL._AC_SY679_.jpg', ano: 2008 }
-      ];
-      localStorage.setItem('meusFilmes', JSON.stringify(this.listaFilmes));
+  atualizarListaDaTela(page: number = 0) {
+    this.authService.getMovies(page).subscribe({
+      next: (data: any) => {
+        // Garantimos que 'movies' receba o array de filmes
+        if (data && data.content) {
+          this.movies = data.content; 
+          this.totalPages = data.totalPages;
+          this.currentPage = data.number;
+        } else {
+          this.movies = data; // Caso o backend mude o formato
+        }
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error("Erro ao carregar filmes no Admin", err)
+    });
+  }
+
+  changePage(newPage: number) {
+    if (newPage >= 0 && newPage < this.totalPages) {
+      this.atualizarListaDaTela(newPage);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
-
   remover(id: number) {
-    const filme = this.listaFilmes.find(f => f.id === id);
+    // Buscamos agora dentro de 'this.movies'
+    const filme = this.movies.find(f => f.id === id);
 
     this.modalService.abrir({
       titulo: 'Excluir Filme',
-      mensagem: `Tem certeza que deseja remover "${filme?.titulo}"?`,
+      mensagem: `Tem certeza que deseja remover "${filme?.title}"?`,
       confirmar: () => {
-        this.listaFilmes = this.listaFilmes.filter(f => f.id !== id);
-        localStorage.setItem('meusFilmes', JSON.stringify(this.listaFilmes));
-        this.toastService.exibir('Filme removido com sucesso!', 'sucesso');
+        this.authService.deleteMovie(id).subscribe({
+          next: () => {
+            this.toastService.exibir('Filme removido com sucesso!');
+            this.atualizarListaDaTela(this.currentPage); // Recarrega a página atual
+          },
+          error: () => {
+            this.toastService.exibir('Erro ao remover filme', 'erro');
+          }
+        });
       }
     });
   }

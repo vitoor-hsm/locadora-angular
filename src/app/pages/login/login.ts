@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { AuthService } from '../../services/auth';
 import { IconeComponent } from '../../components/icone/icone';
 import { MenuLateral } from '../../components/menu-lateral/menu-lateral';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -18,11 +19,12 @@ export class LoginComponent{
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {
     this.loginForm = this.fb.group({
       login: ['', [Validators.required]],
-      senha: ['', [Validators.required]]
+      password: ['', [Validators.required]]
     });
   }
   onSubmit() {

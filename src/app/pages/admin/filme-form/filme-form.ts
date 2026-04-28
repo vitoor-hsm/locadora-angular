@@ -5,11 +5,12 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MenuLateral } from '../../../components/menu-lateral/menu-lateral';
 import { Toast, ToastService } from '../../../core/services/toast';
 import { ModalService } from '../../../services/modal';
+import { AuthService } from '../../../services/auth';
 
 @Component({
   selector: 'app-filme-form',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, MenuLateral], 
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, MenuLateral],
   templateUrl: './filme-form.html',
   styleUrl: './filme-form.css',
 })
@@ -17,24 +18,26 @@ export class FilmeFormComponent implements OnInit {
   filmeForm!: FormGroup;
   isEdicao: boolean = false;
   idFilmeEdicao: number | null = null;
+  cdr: any;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
     private toastService: ToastService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
     this.filmeForm = this.fb.group({
-      titulo: ['', [Validators.required, Validators.minLength(3), semEspacosVazios]],
-      genero: ['', [Validators.required, Validators.minLength(3), semEspacosVazios]],
-      ano: ['', [Validators.required, Validators.min(1895), Validators.max(2026)]],
-      capa: ['', [
-      Validators.required, 
-      Validators.pattern(/^(http|https):\/\/[^ "]+$/)]],
-      descricao: ['', [Validators.required, Validators.maxLength(500)]]
+      title: ['', [Validators.required, Validators.minLength(3), semEspacosVazios]],
+      genre: ['', [Validators.required, Validators.minLength(3), semEspacosVazios]],
+      releaseYear: ['', [Validators.required, Validators.min(1895), Validators.max(2026)]],
+      posterUrl: ['', [
+        Validators.required,
+        Validators.pattern(/^(http|https):\/\/[^ "]+$/)]],
+      synopsis: ['', [Validators.required, Validators.maxLength(500)]]
     });
 
     this.route.paramMap.subscribe(params => {
@@ -53,22 +56,21 @@ export class FilmeFormComponent implements OnInit {
   }
 
   carregarDadosDoFilme(id: number) {
-    const dados = localStorage.getItem('meusFilmes');
-    if (dados) {
-      const filmesDoBanco = JSON.parse(dados);
-      const encontrado = filmesDoBanco.find((f: any) => f.id === id);
-
-      if (encontrado) {
-        this.filmeForm.patchValue(encontrado);
-      } else {
-        this.toastService.exibir('Filme não encontrado!', 'erro');
+    this.authService.getMoviesById(id).subscribe({
+      next: (movie: any) => {
+        if (movie) {
+          this.filmeForm.patchValue(movie);
+          this.filmeForm.markAsDirty();
+          this.filmeForm.updateValueAndValidity();
+          this.cdr.detectChanges();
+        }
+      },
+      error: () => {
+        this.toastService.exibir('Erro ao carregar dados do filme!', 'erro');
         this.router.navigate(['/admin']);
       }
-    } else {
-      this.router.navigate(['/admin']);
-    }
+    });
   }
-
   salvar() {
     // validação básica antes de qualquer coisa
     if (this.filmeForm.invalid) {
@@ -80,9 +82,9 @@ export class FilmeFormComponent implements OnInit {
     // abre o Modal perguntando se confirma
     this.modalService.abrir({
       titulo: this.isEdicao ? 'Confirmar Edição' : 'Confirmar Cadastro',
-      mensagem: this.isEdicao 
-        ? `Deseja salvar as alterações no filme "${this.filmeForm.value.titulo}"?`
-        : `Deseja cadastrar o filme "${this.filmeForm.value.titulo}" no catálogo?`,
+      mensagem: this.isEdicao
+        ? `Deseja salvar as alterações no filme "${this.filmeForm.value.title}"?`
+        : `Deseja cadastrar o filme "${this.filmeForm.value.title}" no catálogo?`,
       confirmar: () => {
         // só executa se clicar em "Confirmar" no modal
         this.executarSalvamento();
@@ -90,24 +92,24 @@ export class FilmeFormComponent implements OnInit {
     });
   }
   private executarSalvamento() {
-    const dadosLocal = localStorage.getItem('meusFilmes');
-    let filmes = dadosLocal ? JSON.parse(dadosLocal) : [];
     const dadosForm = this.filmeForm.value;
 
-    if (this.isEdicao) {
-      const index = filmes.findIndex((f: any) => f.id === this.idFilmeEdicao);
-      if (index !== -1) {
-        filmes[index] = { ...dadosForm, id: this.idFilmeEdicao };
-        this.toastService.exibir('Filme atualizado com sucesso!', 'sucesso');
+    const filmeParaSalvar = this.isEdicao
+      ? { ...dadosForm, id: this.idFilmeEdicao }
+      : dadosForm;
+    
+    this.authService.saveMovie(filmeParaSalvar).subscribe({
+      next: (res: any) => {
+        this.toastService.exibir(
+          this.isEdicao ? 'Filme atualizado com sucesso!' : 'Filme salvo com sucesso!',
+          'sucesso'
+        );
+        this.router.navigate(['/admin']);
+      },
+      error: (err: any) => {
+        this.toastService.exibir('Erro ao salvar no banco de dados', 'erro');
       }
-    } else {
-      const novoId = filmes.length > 0 ? Math.max(...filmes.map((f: any) => f.id)) + 1 : 1;
-      const novoFilme = { ...dadosForm, id: novoId };
-      filmes.push(novoFilme);
-      this.toastService.exibir('Filme salvo com sucesso!', 'sucesso');
-    }
-    localStorage.setItem('meusFilmes', JSON.stringify(filmes));
-    this.router.navigate(['/admin']);
+    });
   }
 
 }

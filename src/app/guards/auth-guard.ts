@@ -7,12 +7,12 @@ export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);// e expusar se precisar
 
   //essa parte é pra ver se realmente ta logado
-  if (!authService.estaAutenticado()) {
+  if (!authService.isAuthenticated()) {
     router.navigate(['/login']);
     return false;
   }
   // e essa é pra ver o nivel do acesso
-  const perfilUsuario = authService.getPerfil();// pega o cargo de qm ta logado
+  const perfilUsuario = authService.getRole();// pega o cargo de qm ta logado
   const perfilExigido = route.data['papelOriginal']; // e aqui vai la no app.routes ecompara pra ver se bate
 
   // console.log('Perfil do Usuário Logado:', perfilUsuario);

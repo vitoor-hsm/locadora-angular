@@ -3,30 +3,32 @@
 <div class="main-content">
   <header class="header-user">
     <div class="titulo-container">
-      <h1>{{ exibindoApenasFavoritos ? 'Seus Favoritos' : 'Todas as opções para você' }}</h1>
+      <h1>{{ isShowingFavoritesOnly ? 'Seus Favoritos' : 'Todas as opções para você' }}</h1>
 
-      <button *ngIf="exibindoApenasFavoritos" (click)="limparFiltro()" class="btn-ver-todos">
+      <button *ngIf="isShowingFavoritesOnly" (click)="clearFilter()" class="btn-ver-todos">
         ← Voltar para o catálogo completo
       </button>
     </div>
-    <p *ngIf="!exibindoApenasFavoritos">Confira os últimos lançamentos da nossa locadora.</p>
+    <p *ngIf="!isShowingFavoritesOnly">Confira os últimos lançamentos da nossa locadora.</p>
   </header>
 
-  <div class="grid-filmes" *ngIf="filmes.length > 0">
-    <div class="card-filme" *ngFor="let filme of filmes">
+  <div class="grid-filmes" *ngIf="movies.length > 0">
+    <div class="card-filme" *ngFor="let movie of movies">
       <div class="capa-container">
-        <span class="badge-novo" *ngIf="filme.ano == 2026">NOVO</span>
-        <img [src]="filme.capa || 'assets/placeholder.png'" alt="Capa do filme">
-        <button class="btn-favorito" (click)="toggleFavorito(filme.id)" [class.ativo]="isFavorito(filme.id)">
-          <app-icone [nome]="isFavorito(filme.id) ? 'favorito' : 'favorito-vazio'"></app-icone>
+        <span class="badge-novo" *ngIf="movie.releaseYear == 2026">NOVO</span>
+        <img [src]="movie.posterUrl || 'assets/placeholder.png'" alt="Capa do filme">
+
+        <button class="btn-favorito" (click)="toggleFavorite(movie)" [class.ativo]="movie.favorite || movie.isFavorite">
+          <app-icone [nome]="(movie.favorite || movie.isFavorite) ? 'favorito' : 'favorito-vazio'"></app-icone>
         </button>
       </div>
 
       <div class="card-info">
-        <h3>{{ filme.titulo }}</h3>
-        <span class="genero-tag">{{ filme.genero }}</span>
-        <p class="ano">{{ filme.ano }}</p>
-        <button class="btn-detalhes" (click)="abrirModalDetalhes(filme)">
+        <h3>{{ movie.title }}</h3>
+        <span class="genero-tag">{{ movie.genre }}</span>
+        <p class="ano">{{ movie.releaseYear }}</p>
+
+        <button class="btn-detalhes" (click)="openDetailsModal(movie)">
           <app-icone nome="ver"></app-icone>
           Ver Detalhes
         </button>
@@ -34,12 +36,12 @@
     </div>
   </div>
 
-  <div *ngIf="filmes.length === 0" class="sem-filmes">
-    <ng-container *ngIf="exibindoApenasFavoritos; else listaVazia">
+  <div *ngIf="movies.length === 0" class="sem-filmes">
+    <ng-container *ngIf="isShowingFavoritesOnly; else listaVazia">
       <app-icone nome="favorito-vazio" tamanho="48px"></app-icone>
       <h2>Sua lista de favoritos está vazia</h2>
       <p>Clique no coração dos filmes para salvá-los aqui!</p>
-      <button class="btn-detalhes" (click)="limparFiltro()">Ver Catálogo Completo</button>
+      <button class="btn-detalhes" (click)="clearFilter()">Ver Catálogo Completo</button>
     </ng-container>
 
     <ng-template #listaVazia>
@@ -48,8 +50,22 @@
   </div>
 </div>
 
-<app-modal-filme 
-  [filme]="filmeSelecionado" 
-  [exibir]="mostrarModalDetalhes" 
-  (fechar)="fecharModalDetalhes()">
+<app-modal-filme [exibir]="showDetailsModal" [movie]="selectedMovie" (fechar)="closeDetailsModal()">
 </app-modal-filme>
+
+<div class="pagination" *ngIf="totalPages > 1">
+  <button class="btn-nav" [disabled]="currentPage === 0" (click)="changePage(currentPage - 1)">
+    Anterior
+  </button>
+
+  <div class="page-numbers">
+    <button *ngFor="let p of [].constructor(totalPages); let i = index" [class.active]="i === currentPage"
+      (click)="changePage(i)">
+      {{ i + 1 }}
+    </button>
+  </div>
+
+  <button class="btn-nav" [disabled]="currentPage === totalPages - 1" (click)="changePage(currentPage + 1)">
+    Próxima
+  </button>
+</div>

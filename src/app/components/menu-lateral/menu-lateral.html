@@ -8,7 +8,7 @@
         <hr style="margin: 0 25px 20px; opacity: 0.2;">
 
         <ul style="flex-grow: 1;">
-            <ng-container *ngIf="perfilUsuario === 'ADM'">
+            <ng-container *ngIf="perfilUsuario === 'ADM' || perfilUsuario === 'ADMIN'">
                 <li [routerLink]="['/admin/filme/editar/novo']" (click)="toggleMenu()">
                     <app-icone nome="filme"></app-icone>
                     Cadastrar Filmes
@@ -20,11 +20,11 @@
             </ng-container>
 
             <ng-container *ngIf="perfilUsuario === 'USER'">
-                <li (click)="executarFavoritos()">
+                <li (click)="toggleFavorites()">
                     <app-icone nome="favorito"></app-icone>
                     Ver Favoritos
                 </li>
-                <li (click)="executarNovidades()">
+                <li (click)="toggleNewest()">
                     <app-icone nome="novidades"></app-icone> Ver Novidades
                 </li>
             </ng-container>

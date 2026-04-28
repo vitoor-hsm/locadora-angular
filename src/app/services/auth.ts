@@ -1,71 +1,114 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private users = [ //banco de dados simulado
-    { login: 'admin', senha: '123', perfil: 'ADM' },
-    { login: 'user', senha: '123', perfil: 'USER' }
-  ];
 
-  private usuarioLogado: any = null;
+  private loggedUser: any = null;
+  private readonly API_MOVIES = 'http://localhost:8080/movies';
+  private readonly API_AUTH = 'http://localhost:8080/auth/login';
+  private readonly API_BASE = 'http://localhost:8080';
+  private favoritesFilterSource = new BehaviorSubject<boolean>(false);
+  favoritesFilter$ = this.favoritesFilterSource.asObservable();
+  private sortNewestSource = new BehaviorSubject<boolean>(false);
+  sortNewest$ = this.sortNewestSource.asObservable();
 
-  constructor(private router: Router) { //quando o site carrega, o serviço "acorda" e olha no local storage 
-    const salvo = localStorage.getItem('usuarioLogado');// se encontrar alguém lá, ele já loga o usuário 
-    if (salvo) { //automaticamente para ele não precisar digitar a senha toda vez que der F5.
-      this.usuarioLogado = JSON.parse(salvo);
+  constructor(private router: Router, private http: HttpClient) {
+    const salvo = localStorage.getItem('loggedUser');
+    if (salvo) {
+      this.loggedUser = JSON.parse(salvo);
     }
 
   }
-
 
   login(dados: any) {
-    const user = this.users.find(u => u.login === dados.login && u.senha === dados.senha);
-    //percorre a listade usuario procurando alguém que tenha o login E senha iguais ao BD simulado
-    if (user) { // se tiver, ele salva no local storage, guarda na variavel "usuariologado" e usa o 
-      this.usuarioLogado = user; // router.navigate para mandar cada perfil para sua home certa
+    return this.http.post('http://localhost:8080/auth/login', dados, { withCredentials: true }).subscribe({
+      next: (user: any) => {
+        // 1. Guardamos o usuário SEM mostrar no console
+        this.loggedUser = user;
 
-      localStorage.setItem('usuarioLogado', JSON.stringify(user));
+        // 2. No localStorage, só fica o que é necessário para o Angular funcionar
+        // (O Java já deve ter parado de enviar a senha no JSON)
+        localStorage.setItem('loggedUser', JSON.stringify(user));
 
-      if (user.perfil === 'ADM') {
-        this.router.navigate(['/admin']);
-      } else {
-        this.router.navigate(['/user']);
-      } // se não achar ele manda esse alert
+        if (user.role === 'ADM') {
+          this.router.navigate(['/admin']);
+        } else {
+          this.router.navigate(['/user']);
+        }
+      },
+      error: (err) => alert('Login inválido!')
+    });
+  }
+
+  isAuthenticated(): boolean { // used by the guard to check if someone is logged in
+    return this.loggedUser !== null;
+  }
+
+  getRole(): String { // tells if the user is admin or normal user, used by the sidebar menu to hide or show buttons
+    return this.loggedUser?.role;
+  }
+
+  logout() { // clears everything, removes localStorage, resets the variable and redirects the user back to login
+    this.loggedUser = null;
+    localStorage.removeItem('loggedUser');
+    this.router.navigate(['/login']);
+  }
+  updateSortNewest(isNewest: boolean) {
+    this.sortNewestSource.next(isNewest);
+  }
+  getMovies(page: number, userId?: number, sort: string = 'title,asc'): Observable<any> {
+    let params = `?page=${page}&size=14&sort=${sort}`;
+
+    if (userId) {
+      params += `&userId=${userId}`;
+    }
+
+    return this.http.get(`http://localhost:8080/movies${params}`, { withCredentials: true });
+  }
+  getMoviesById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.API_MOVIES}/${id}`);
+  }
+  updateFavoritesFilter(isVisible: boolean) {
+    this.favoritesFilterSource.next(isVisible);
+  }
+  getFavoriteMovies(page: number, userId: number): Observable<any> {
+    return this.http.get(`http://localhost:8080/movies/favorites?page=${page}&userId=${userId}`, { withCredentials: true });
+  }
+
+
+  toggleFavorite(movieId: number): Observable<any> {
+    const userJson = localStorage.getItem('loggedUser');
+    const user = userJson ? JSON.parse(userJson) : null;
+
+    // pega o ID do usuário 
+    const userId = user ? user.id : null;
+
+    // O Java agora espera o ID do filme na URL e o ID do usuário no corpo
+    return this.http.post(
+      `http://localhost:8080/movies/${movieId}/favorite`,
+      userId, // Enviamos apenas o número do ID como corpo
+      { withCredentials: true }
+    );
+  }
+
+  saveMovie(movie: any): Observable<any> {
+    if (movie.id) {
+      // If it has an ID, it calls the PUT event that was created in Java
+      return this.http.put(`${this.API_MOVIES}/${movie.id}`, movie);
     } else {
-      alert('Login ou senha inválidos')
-    }
-
-  }
-
-  estaAutenticado(): boolean { // é usado pelo guard pra saber se alguem fez login
-    return this.usuarioLogado !== null;
-  }
-  getPerfil(): String { // diz se o cara é adm ou user, é usado pelo menu lateral para esconder ou mostrarbott
-    return this.usuarioLogado?.perfil;
-  }
-
-  logout() { // limpa tudo, apaga o localStorage, zera a variavel e manda o usuario de volta pro login
-    this.usuarioLogado = null;
-    localStorage.removeItem('usuarioLogado');
-    this.router.navigate(['/Login']);
-  }
-
-  private filmes = [ // lista de filmes mockada pra não iniciar sem nd
-    { id: 1, titulo: 'Interestelar', genero: 'Ficção Científica', ano: 2014, capa: 'https://cdn.ome.lt/legacy/images/galerias/Interstellar/Interstellar-poster-11ago2014-01.jpg', favorito: false },
-    { id: 2, titulo: 'Batman', genero: 'Ação', ano: 2008, capa: 'https://upload.wikimedia.org/wikipedia/pt/d/d1/The_Dark_Knight.jpg', favorito: false }
-  ];
-  getFilmes() { return this.filmes; }
-  
-  alternarFavorito(id: number) {
-    const filme = this.filmes.find(f => f.id === id);
-    if (filme) {
-      filme.favorito = !filme.favorito;
+      // If there is no ID, call POST.
+      return this.http.post(this.API_MOVIES, movie);
     }
   }
-  excluirFilme(id: number) {
-    this.filmes = this.filmes.filter(f => f.id !== id);
-  } // o filme que tiver o id igual ao id que passei cai na peneira e é cortado
+
+  deleteMovie(id: number): Observable<any> {
+    return this.http.delete(`${this.API_MOVIES}/${id}`);
+  }
+
+
 }
