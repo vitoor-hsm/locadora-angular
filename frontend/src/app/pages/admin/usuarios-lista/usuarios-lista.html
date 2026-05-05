@@ -1,0 +1,113 @@
+<app-menu-lateral></app-menu-lateral>
+
+<div class="main-content">
+    <a routerLink="/admin" class="btn-voltar">
+        <app-icone nome="voltar" tamanho="16px"></app-icone>
+        <span> Voltar ao Painel</span>
+    </a>
+    <div class="header-acoes">
+        <br>
+        <button class="btn-adicionar" [routerLink]="['/admin/usuarios/form/new']">
+            <app-icone nome="adicionar" tamanho="18px"></app-icone>
+            Novo Usuário
+        </button>
+    </div>
+    <div class="header-pagina">
+        <h1>Gerenciar Usuários</h1>
+
+        <div class="busca-container">
+            <app-icone nome="busca" tamanho="18px" class="icon-busca"></app-icone>
+            <input type="text" [(ngModel)]="searchTerm" placeholder="Pesquisar usuário por nome...">
+        </div>
+    </div>
+
+    <div class="tabela-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>Perfil</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let user of filteredUsers">
+                    <tr>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            <span class="badge" [ngClass]="user.role === 'ADM' ? 'adm' : 'user'">
+                                {{ user.role }}
+                            </span>
+                        </td>
+                        <td class="acoes">
+                            <button class="btn-acao btn-ver" (click)="toggleExpansion(user.id)" title="Ver Detalhes">
+                                <app-icone [nome]="expandedUserId === user.id ? 'fechar' : 'ver'"></app-icone>
+                            </button>
+
+                            <button class="btn-acao btn-editar" [routerLink]="['/admin/usuarios/form', user.id]"
+                                title="Editar">
+                                <app-icone nome="editar"></app-icone>
+                            </button>
+                            <button class="btn-acao btn-excluir" (click)="deleteUser(user.id)" title="Excluir">
+                                <app-icone nome="excluir"></app-icone>
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr *ngIf="expandedUserId === user.id" class="linha-detalhes">
+                        <td colspan="4">
+                            <div class="detalhes-usuario-card">
+                                <div class="info-grid">
+                                    <div class="info-item">
+                                        <strong>ID Interno:</strong>
+                                        <span>#{{ user.id }}</span>
+                                    </div>
+
+                                    <div class="info-item">
+                                        <strong>Login:</strong>
+                                        <span>{{ user.login }}</span>
+                                    </div>
+
+                                    <div class="info-item">
+                                        <strong>Acessibilidade:</strong>
+                                        <span>{{ user.highContrast ? 'Alto Contraste Ativo' : 'Padrão' }}</span>
+                                    </div>
+
+                                    <div class="info-item">
+                                        <strong>Favoritos:</strong>
+                                        <span class="badge-favoritos">
+                                            {{ user.totalFavorites || 0 }} filmes
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+
+        <div *ngIf="filteredUsers.length === 0" class="sem-resultados">
+            Nenhum usuário encontrado com o nome "{{ searchTerm }}".
+        </div>
+    </div>
+</div>
+
+<div class="pagination" *ngIf="totalPages > 1">
+    <button class="btn-nav" [disabled]="currentPage === 0" (click)="changePage(currentPage - 1)">
+        Anterior
+    </button>
+
+    <div class="page-numbers">
+        <button *ngFor="let p of [].constructor(totalPages); let i = index" [class.active]="i === currentPage"
+            (click)="changePage(i)">
+            {{ i + 1 }}
+        </button>
+    </div>
+
+    <button class="btn-nav" [disabled]="currentPage === totalPages - 1" (click)="changePage(currentPage + 1)">
+        Próxima
+    </button>
+</div>

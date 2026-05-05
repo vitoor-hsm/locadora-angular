@@ -1,0 +1,79 @@
+.container-detalhes {
+  padding: 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+  color: var(--text-color);
+}
+
+.header-acoes {
+  margin-bottom: 20px;
+}
+
+.btn-voltar {
+  background: none;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-voltar:hover {
+  background: var(--primary-color);
+  color: white;
+}
+
+.detalhes-card {
+  display: flex;
+  gap: 40px;
+  background: var(--form-bg);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.info h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.genero-tag {
+  background: var(--primary-color);
+  color:rgb(0, 0, 0);
+  padding: 5px 15px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.descricao {
+  line-height: 1.6;
+  font-size: 1.1rem;
+  color: var(--label-color);
+  margin-top: 20px;
+}
+
+.detalhes-card {
+    display: flex;
+    gap: 30px;
+    background: var(--form-bg); /* Aproveitando suas variáveis */
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.capa-container img {
+    max-width: 300px;
+    border-radius: 8px;
+}
+
+.sinopse {
+    margin-top: 20px;
+    line-height: 1.6;
+}
+body.high-contrast .genero-tag{
+  color: black;
+
+}
